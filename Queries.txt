@@ -1,0 +1,40 @@
+Queries used in Hive and Excel to generate Graphs
+
+
+Create Table :
+
+CREATE TABLE FOOD_INSPECTIONS
+(
+	Inspection_ID string,
+	Name string,
+	Licence_No string,
+	Facility_Type string,
+	Risk string,
+	Address string,
+	City string,
+	State string,
+	ZIP string,
+	Inspection_Date string,
+	Inspection_Type string,
+	Results string,
+	Latitude string,
+	Longitude string
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' 
+TBLPROPERTIES("skip.header.line.count"="1");
+
+Load Table :
+LOAD DATA INPATH '\HdiSamples\Food_Inspections (2).csv'Overwrite into table Food_Inspections;
+
+Select All query :
+Select * from Food_Inspections;
+
+Queries used to create Graphs :
+select facility_type, count(Risk) from food_inspections where risk='High' group by facility_type, risk;
+select risk, count(Risk) as Risk_count from food_inspections group by risk;
+select results as status, count(Results) as Results_count from food_inspections group by results;
+select latitude, longitude from food_inspections;
+select inspection_type, results, count(results) from food_inspections group by inspection_type, results;
+select facility_type, results, count(results) as results_count from food_inspections where facility_type='RESTAURANT' group by facility_type, results;
+select  year(inspection_date), results, count(results) from food_inspections group by year(inspection_date), results;
+select name, year(inspection_date), results, count(results) from food_inspections where name='PIZZA HUT' group by name, year(inspection_date), results;
